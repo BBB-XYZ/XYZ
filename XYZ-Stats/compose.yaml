@@ -1,0 +1,6 @@
+﻿services:
+  xyz-stats.api:
+    image: xyz-stats.api
+    build:
+      context: .
+      dockerfile: XYZ-Stats.API/Dockerfile

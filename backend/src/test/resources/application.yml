@@ -5,28 +5,16 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: backend
     password: backend
-    url: jdbc:postgresql://localhost:5432/backend
+    url: jdbc:postgresql://localhost:5432/backend_test
   jpa:
     hibernate:
       ddl-auto: create
   main:
     allow-bean-definition-overriding: true
+
   sql:
     init:
       mode: always
 server:
   servlet:
     context-path: /api
-
-logging:
-  level:
-    org:
-      springframework:
-        boot:
-          autoconfigure: off
-
-backend:
-  session:
-    expiration: 3600
-
-debug: true

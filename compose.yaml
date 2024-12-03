@@ -1,0 +1,37 @@
+﻿services:
+
+  xyz-stats.api:
+    image: xyz-stats.api
+    build:
+      context: .
+      dockerfile: XYZ-Stats/XYZ-Stats.API/Dockerfile
+
+#################################################
+#                   Databases                   #
+#################################################
+
+  stats-db:
+    image: postgres:${PG_IMAGE_TAG}
+    container_name: stats-db
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=stats-db
+    volumes:
+      - ./data/stats-db:/var/lib/postgresql/data
+
+  dashboard-db:
+    image: postgres:${PG_IMAGE_TAG}
+    container_name: dashboard-db
+    restart: unless-stopped
+    ports:
+      - 5433:5432
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=dashboard-db
+    volumes:
+      - ./data/dashboard-db:/var/lib/postgresql/data

@@ -1,6 +1,6 @@
 package com.xyz.backend.dtos;
 
-public record GenericMessageDto(String message) {
+public record GenericMessageDTO(String message) {
   public String message() {
     return message;
   }

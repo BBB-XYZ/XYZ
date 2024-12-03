@@ -3,6 +3,7 @@ package com.xyz.backend.authentication;
 import com.xyz.backend.authentication.user.DashUserDetails;
 import com.xyz.backend.authentication.user.DashUserDetailsRepository;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class DashAuthenticationManager implements AuthenticationManager {
   private DashUserDetailsRepository userDetailsRepository;
   private PasswordEncoder passwordEncoder;

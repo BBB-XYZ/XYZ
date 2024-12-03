@@ -3,27 +3,26 @@ spring:
     name: Backend
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: backend
-    password: backend
-    url: jdbc:postgresql://localhost:5432/backend
+    url: jdbc:postgresql://localhost:5432/backend?user=postgres&password=postgres
   jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   main:
     allow-bean-definition-overriding: true
-  sql:
-    init:
-      mode: always
 server:
   servlet:
     context-path: /api
-
 logging:
   level:
     org:
       springframework:
         boot:
           autoconfigure: off
+          security: trace
 
 backend:
   session:

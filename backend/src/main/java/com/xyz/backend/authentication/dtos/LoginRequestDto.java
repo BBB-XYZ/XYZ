@@ -1,6 +1,6 @@
 package com.xyz.backend.authentication.dtos;
 
-public record LoginRequestDto(String username, String password) {
+public record LoginRequestDTO(String username, String password) {
 
   @Override
   public String username() {

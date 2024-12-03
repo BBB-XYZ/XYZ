@@ -1,7 +1,5 @@
 package com.xyz.backend.authentication.session;
 
-import com.xyz.backend.authentication.user.DashUserDetails;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -10,13 +8,19 @@ public class UserSessionService {
   @Value("${backend.session.expiration}")
   private long sessionExpiration;
 
-  public UserSessionEntity createSession(DashUserDetails userDetails) {
-    String token = UUID.randomUUID().toString();
-    UserSessionEntity session = new UserSessionEntity();
-    session.setToken(token);
-    session.setExpiresAt(System.currentTimeMillis() + (1000 * sessionExpiration));
-    userDetails.setSession(session);
+  private UserSessionRepository userSessionRepository;
 
-    return session;
+  public UserSessionService(UserSessionRepository userSessionRepository) {
+    this.userSessionRepository = userSessionRepository;
+  }
+
+  public UserSessionEntity createSession() {
+    UserSessionEntity session = new UserSessionEntity();
+    session.setExpiresAt(System.currentTimeMillis() + (1000 * sessionExpiration));
+    return userSessionRepository.save(session);
+  }
+
+  public void invalidateSession(String token) {
+    userSessionRepository.deleteById(token);
   }
 }

@@ -20,17 +20,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore --packages ./XYZ-Stats
+      run: cd ./XYZ-Stats && dotnet restore
     - name: Build
-      run: dotnet build --no-restore --packages ./XYZ-Stats
+      run: cd ./XYZ-Stats && dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal  --collect:"XPlat Code Coverage" --packages ./XYZ-Stats
-    - name: Find coverage reports
-      id: find-reports
-      run: |
-        echo "::set-output name=paths::$(find ${{ github.workspace }} -name "coverage.cobertura.xml")"
-    - name: Send coverage-reports to Codacy
-      uses: codacy/codacy-coverage-reporter-action@v1.3.0
-      with:
-        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        coverage-reports: ${{ steps.find-reports.outputs.paths }}
+      run: cd ./XYZ-Stats && dotnet test --no-build --verbosity normal

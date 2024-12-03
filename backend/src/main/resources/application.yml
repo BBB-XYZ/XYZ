@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: Backend
+
+server:
+  servlet:
+    context-path: /api

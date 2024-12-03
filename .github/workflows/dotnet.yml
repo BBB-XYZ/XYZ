@@ -15,22 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Change to project directory
-      run: cd ./XYZ-Stats
-
-    - name: Change to project directory
-      run: ls
-
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore --packages ./XYZ-Stats
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --packages ./XYZ-Stats
     - name: Test
-      run: dotnet test --no-build --verbosity normal  --collect:"XPlat Code Coverage"
+      run: dotnet test --no-build --verbosity normal  --collect:"XPlat Code Coverage" --packages ./XYZ-Stats
     - name: Find coverage reports
       id: find-reports
       run: |

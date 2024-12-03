@@ -1,1 +1,6 @@
-<p>navbar works!</p>
+<div class="navbar">
+  <div class="logo">XYZ</div>
+  <button (click)="toggleAuth()" class="auth-button" mat-button>
+    {{ isAuthenticated ? 'Logout' : 'Login' }}
+  </button>
+</div>

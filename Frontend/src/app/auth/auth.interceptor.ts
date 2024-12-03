@@ -1,5 +1,25 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  return next(req);
-};
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+
+  private authService = inject(AuthService);
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const token = this.authService.getToken();
+
+    if (token) {
+      const cloned = req.clone({
+        setHeaders: {
+          Authorization: token,
+        },
+      });
+      return next.handle(cloned);
+    }
+
+    return next.handle(req); // Hopes and Prayers, maybe we messed up the backend auth and it will work ;)
+  }
+}

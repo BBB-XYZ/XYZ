@@ -37,24 +37,24 @@ jobs:
           echo "Initializing database cluster..."
 
           # Convert backslashes to forward slashes in RUNNER_TEMP for Windows Git Bash
-          export PGHOST="${RUNNER_TEMP//\\//}/$PGDATABASE"
+          export PGHOST="${RUNNER_TEMP//\\//}/postgres"
           export PGDATA="$PGHOST/pgdata"
           mkdir -p "$PGDATA"
 
           # initdb requires file for password in non-interactive mode
           export PWFILE="$RUNNER_TEMP/pwfile"
-          echo "$PGPASSWORD" > $PWFILE
-          initdb --pgdata="$PGDATA" --username="$PGUSERNAME" --pwfile="$PWFILE"
+          echo "postgres" > $PWFILE
+          initdb --pgdata="$PGDATA" --username="postgres" --pwfile="$PWFILE"
 
           echo "Starting PostgreSQL..."
           echo "unix_socket_directories = '$PGHOST'" >> "$PGDATA/postgresql.conf"
           pg_ctl start
 
           echo "Creating user..."
-          psql --host "$PGHOST" --username="$PGUSERNAME" --dbname="$PGDATABASE" --command="CREATE USER $PGUSERNAME PASSWORD '$PGPASSWORD'" --command="\du"
+          psql --host "$PGHOST" --username="postgres" --dbname="postgres" --command="CREATE USER $PGUSERNAME PASSWORD '$PGPASSWORD'" --command="\du"
 
           echo "Creating database..."
-          createdb --owner="$PGUSERNAME" --username="$PGUSERNAME" "$PGDATABASE"
+          createdb --owner="$PGUSERNAME" --username="postgres" "$PGDATABASE"
       - uses: actions/checkout@v4
       - name: Set up JDK 21
         uses: actions/setup-java@v4

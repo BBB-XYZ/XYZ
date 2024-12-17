@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using XYZ_Stats.Domain.Entitys;
+using XYZ_Stats.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +11,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<XyzStatsDbContext>(context =>
+{
+    context.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    var connectionString = builder.Configuration.GetConnectionString("SqlConnectionString");
+    context.UseSqlServer(connectionString);
+});
+
 var app = builder.Build();
+
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<XyzStatsDbContext>();
+context.Database.Migrate();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

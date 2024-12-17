@@ -12,8 +12,8 @@ import {environment} from '../../environments/environment';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  responseValue: string = '';
-  statusCode: number = 0;
+  responseValue = '';
+  statusCode = 0;
   private readonly apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}

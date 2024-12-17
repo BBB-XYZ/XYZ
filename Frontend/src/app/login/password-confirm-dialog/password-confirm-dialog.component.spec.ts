@@ -16,7 +16,7 @@ describe('PasswordConfirmDialogComponent', () => {
       providers: [
         {
           provide: MatDialogRef,
-          useValue: { close: () => {} },
+          useValue: {},
         },
         {
           provide: MAT_DIALOG_DATA,

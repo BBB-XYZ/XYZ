@@ -24,6 +24,8 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
       FilterChain filterChain) throws ServletException, IOException {
     String token = request.getHeader("Authorization");
 
+    System.out.println("Token: " + token);
+
     if (token == null) {
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
@@ -31,9 +33,12 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
 
     Optional<DashUserDetails> userDetails = userDetailsRepository.findBySession_Token(token);
     if (userDetails.isEmpty()) {
+      System.out.println("User not found");
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
+
+    System.out.println("User: " + userDetails.get().getUsername());
 
     SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails.get(), token,
         userDetails.get().getAuthorities()));

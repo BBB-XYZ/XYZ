@@ -29,7 +29,7 @@ public class SecurityConfiguration {
     http
         .addFilterBefore(sessionAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .securityContext(customizer ->
-            customizer.securityContextRepository(securityContextRepository()))
+            customizer.securityContextRepository(securityContextRepository())).logout(customizer -> customizer.logoutUrl("/api/logout"))
         .csrf(AbstractHttpConfigurer::disable)
         .cors(cors -> cors.configurationSource(request -> {
           CorsConfiguration configuration = new CorsConfiguration();

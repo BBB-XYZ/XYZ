@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xyz.backend.BackendApplicationTest;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -26,11 +27,12 @@ public class UserTest extends BackendApplicationTest {
   DashUserDetailsRepository dashUserDetailsRepository;
 
   @Autowired
-  public UserTest(MockMvc restClient, ObjectMapper objectMapper) {
+  public UserTest(MockMvc restClient, ObjectMapper objectMapper, DashUserDetailsRepository dashUserDetailsRepository) {
     super(restClient, "/", objectMapper);
+    this.dashUserDetailsRepository = dashUserDetailsRepository;
   }
 
-  @BeforeEach
+  @BeforeAll
   public void mock() {
     DashUserDetails existing = new DashUserDetails();
     existing.setUsername("existing");

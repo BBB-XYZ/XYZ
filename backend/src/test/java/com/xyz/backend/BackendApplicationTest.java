@@ -24,16 +24,16 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 @ExtendWith(SpringExtension.class)
-@TestInstance(Lifecycle.PER_CLASS)
 @AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
 public class BackendApplicationTest {
-  private final MockMvc restClient;
+  private final MockMvc mockMvc;
   private final String endpoint;
   private final ObjectMapper objectMapper;
 
-  public BackendApplicationTest(MockMvc restClient, String endpoint, ObjectMapper objectMapper) {
-    this.restClient = restClient;
+  public BackendApplicationTest(MockMvc mockMvc, String endpoint, ObjectMapper objectMapper) {
+    this.mockMvc = mockMvc;
     this.endpoint = endpoint;
     this.objectMapper = objectMapper;
   }
@@ -97,6 +97,6 @@ public class BackendApplicationTest {
         .contentType(type)
         .content((String) body);
 
-    return restClient.perform(builder).andExpectAll(matchers);
+    return mockMvc.perform(builder).andExpectAll(matchers);
   }
 }

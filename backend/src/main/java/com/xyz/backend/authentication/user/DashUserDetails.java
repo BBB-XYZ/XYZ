@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import lombok.Getter;

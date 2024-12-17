@@ -1,6 +1,6 @@
 package com.xyz.backend.authentication.dashboard.dtos;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.xyz.backend.authentication.dashboard.widget.dtos.WidgetDTO;
 import com.xyz.backend.authentication.user.dtos.DashUserDetailsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,4 +13,6 @@ public class DashboardDTO {
   private String uuid;
   private String name;
   private DashUserDetailsDTO owner;
+
+  private WidgetDTO[] widgets;
 }

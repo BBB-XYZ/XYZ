@@ -37,7 +37,7 @@ jobs:
           echo "Initializing database cluster..."
 
           # Convert backslashes to forward slashes in RUNNER_TEMP for Windows Git Bash
-          export PGHOST="${RUNNER_TEMP//\\//}/postgres"
+          export PGHOST="${RUNNER_TEMP//\\//}/$PGDATABASE"
           export PGDATA="$PGHOST/pgdata"
           mkdir -p "$PGDATA"
 

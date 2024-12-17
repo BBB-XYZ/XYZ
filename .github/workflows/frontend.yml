@@ -19,8 +19,6 @@ jobs:
     - name: Install dependencies
       run: cd ./Frontend && npm ci
     - name: Build
-      run: cd ./Frontend && ng build --prod
-    - name: Lint
-      run: cd ./Frontend && ng lint
+      run: cd ./Frontend && npm run build:prod
     - name: Test
-      run: cd ./Frontend && ng test --watch=false --browsers=ChromeHeadless
+      run: cd ./Frontend && npm run test:prod

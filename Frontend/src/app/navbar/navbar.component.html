@@ -1,5 +1,10 @@
 <div class="navbar">
-  <div class="logo">XYZ</div>
+  <div class="logo" (click)="navigateTo('/home')">XYZ</div>
+
+  <div class="nav-links">
+    <button class="nav-button" mat-button (click)="navigateTo('/dashboards')">Dashboards</button>
+  </div>
+
   <button (click)="toggleAuth()" class="auth-button" mat-button>
     {{ isAuthenticated ? 'Logout' : 'Login' }}
   </button>

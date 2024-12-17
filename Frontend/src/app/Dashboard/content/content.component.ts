@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'app-content',
@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
   templateUrl: './content.component.html',
   styleUrl: './content.component.scss'
 })
-export class ContentComponent {
 
+export class ContentComponent {
+  @Input() dashboardData!: {name: string, id: string, widgets: string[]};
+  @Input() edit!: boolean;
 }

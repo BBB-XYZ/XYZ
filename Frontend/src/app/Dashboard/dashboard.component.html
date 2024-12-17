@@ -1,1 +1,29 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+  <div class="topbar">
+    <mat-form-field appearance="fill" class="dropdown">
+      <mat-label>Select Dashboard</mat-label>
+      <mat-select [(value)]="selectedDashboardIndex" class="dropdown">
+        @for (dashboard of dashboards; track $index) {
+          <mat-option [value]="$index" class="option">
+            {{ dashboard.name }}
+          </mat-option>
+        } @empty {
+          <mat-option disabled>No dashboards available</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button (click)="createNewDashboard()" class="edit-button" mat-button>
+      Create new
+    </button>
+    <button (click)="toggleEditing()" class="edit-button" mat-button>
+      {{ isEditing ? 'Cancel' : 'Edit' }}
+    </button>
+    <button (click)="save()" class="edit-button" mat-button>
+      Save
+    </button>
+  </div>
+
+  <div class="content">
+    <app-content [edit]="isEditing" [dashboardData]="dashboards[selectedDashboardIndex]"></app-content>
+  </div>
+</div>

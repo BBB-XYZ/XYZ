@@ -8,4 +8,6 @@ public interface DashUserDetailsRepository extends CrudRepository<DashUserDetail
   Optional<DashUserDetails> findByUsername(String username);
 
   Optional<DashUserDetails> findBySession_Token(String sessionToken);
+
+  boolean existsByUsername(String username);
 }

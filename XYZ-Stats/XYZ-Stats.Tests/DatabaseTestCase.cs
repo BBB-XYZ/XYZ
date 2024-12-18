@@ -4,11 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using XYZ_Stats.Application.Commands;
 using XYZ_Stats.Infrastructure;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace VivavisTool2.Tests;
+namespace XYZ_Stats.Tests;
 
 public class DatabaseTestCase : IDisposable
 {
@@ -24,7 +21,6 @@ public class DatabaseTestCase : IDisposable
         var services = new ServiceCollection();
 
         // services.AddHttpContextAccessor();
-
         services.AddDbContext<XyzStatsDbContext>(option =>
         {
             option.UseQueryTrackingBehavior(queryTrackingBehavior: QueryTrackingBehavior.NoTracking);
@@ -36,15 +32,9 @@ public class DatabaseTestCase : IDisposable
                                 $"Integrated Security=false;" +
                                 $"TrustServerCertificate=True;"
                     )
-                .EnableSensitiveDataLogging();
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors();
         });
-
-        var testConfigurationBuilder = new ConfigurationBuilder();
-        testConfigurationBuilder.AddInMemoryCollection(new Dictionary<string, string>
-        {
-            { "ConnectionStrings:GOTENBERG", "http://localhost:3000" }
-        }!);
-        services.AddSingleton<IConfiguration>(testConfigurationBuilder.Build());
 
         services.AddMemoryCache();
 
@@ -58,6 +48,8 @@ public class DatabaseTestCase : IDisposable
         var serviceProvider = services.BuildServiceProvider();
         Context = serviceProvider.GetRequiredService<XyzStatsDbContext>();
         Mediator = serviceProvider.GetRequiredService<IMediator>();
+
+        Context.Database.EnsureCreated();
     }
 
 

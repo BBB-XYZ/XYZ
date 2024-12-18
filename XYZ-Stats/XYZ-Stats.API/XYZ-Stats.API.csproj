@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MediatR" Version="12.4.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
@@ -21,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\XYZ-Stats.Application\XYZ-Stats.Application.csproj" />
       <ProjectReference Include="..\XYZ-Stats.Infrastructure\XYZ-Stats.Infrastructure.csproj" />
     </ItemGroup>
 

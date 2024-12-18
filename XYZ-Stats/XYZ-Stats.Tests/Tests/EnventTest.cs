@@ -1,7 +1,6 @@
-using VivavisTool2.Tests;
 using XYZ_Stats.Application.Commands;
 
-namespace XYZ_Stats.Tests;
+namespace XYZ_Stats.Tests.Tests;
 
 public class EnventTest() : DatabaseTestCase()
 {

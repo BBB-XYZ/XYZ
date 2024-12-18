@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using XYZ_Stats.Application.Commands;
 using XYZ_Stats.Domain.Entitys;
 using XYZ_Stats.Infrastructure;
 
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<XyzStatsDbContext>(context =>
     var connectionString = builder.Configuration.GetConnectionString("SqlConnectionString");
     context.UseSqlServer(connectionString);
 });
+
+builder.Services.AddMediatR(c => c.RegisterServicesFromAssemblies(typeof(AddEventCommand).Assembly));
 
 var app = builder.Build();
 

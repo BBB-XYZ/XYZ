@@ -13,7 +13,7 @@ namespace XYZ_Stats.Infrastructure
         {
         }
 
-        public DbSet<BasicEvent> Event { get; set; }
+        public DbSet<Event> Event { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,7 +43,6 @@ namespace XYZ_Stats.Infrastructure
         }
 
         private const string CreatedFieldName = nameof(EntityBase.CreatedAt);
-        private const string UpdatedFieldName = nameof(EntityBase.UpdatedAt);
 
         private void UpdateTimestamps()
         {
@@ -51,9 +50,6 @@ namespace XYZ_Stats.Infrastructure
             {
                 if (entry.Properties.Any(p => p.Metadata.Name == CreatedFieldName) && entry.State == EntityState.Added)
                     entry.Property(CreatedFieldName).CurrentValue = DateTime.UtcNow;
-
-                if (entry.Properties.Any(p => p.Metadata.Name == UpdatedFieldName) && entry.State is EntityState.Added or EntityState.Modified)
-                    entry.Property(UpdatedFieldName).CurrentValue = DateTime.UtcNow;
             }
         }
     }

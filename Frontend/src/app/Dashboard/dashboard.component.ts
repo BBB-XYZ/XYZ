@@ -1,8 +1,30 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {ContentComponent} from './content/content.component';
+import {HttpClient, provideHttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {resolve} from '@angular/compiler-cli';
+
+export type Widget = {
+  uuid: string;
+  widgetStoreUrl: string;
+  widgetId: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+export type Dashboard = {
+  id: string;
+  name: string;
+  owner: Owner;
+  widgets: Widget[];
+};
+
+export type Owner = any;
 
 @Component({
   selector: 'app-dashboard',
@@ -13,14 +35,29 @@ import {ContentComponent} from './content/content.component';
 })
 
 export class DashboardComponent {
-  protected dashboards: {name: string, id: string, widgets: string[]}[] = [
-    {name: "dashboard1", id: "uuid-1",widgets:  ["w1", "w2"]},
-    {name: "dashboard2", id: "uuid-2",widgets:  ["w1", "w2"]},
-    {name: "dashboard3", id: "uuid-3",widgets:  ["w1", "w2"]},
-    {name: "dashboard4", id: "uuid-4",widgets:  ["w1", "w2"]},
-  ];
+  protected dashboards: Dashboard[] = [];
 
-  protected selectedDashboardIndex = 0
+  private httpClient = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
+
+  constructor() {
+    this.httpClient.get<Dashboard[]>(`${this.apiUrl}/dashboard/all`).subscribe({
+      next: (response) => {
+        for (const dashboard of response) {
+          this.dashboards.push(
+            dashboard,
+          );
+        }
+
+        this.unmodifiedSelectedDashboard = { ...this.dashboards[0] };
+        this.selectedDashboard = this.dashboards[0];
+      },
+    });
+  }
+
+  protected selectedDashboardIndex = 0;
+  protected unmodifiedSelectedDashboard = this.dashboards[0];
+  protected selectedDashboard = this.dashboards[0];
   protected isEditing = false;
 
   toggleEditing() {
@@ -31,15 +68,31 @@ export class DashboardComponent {
   }
 
   createNewDashboard() {
-    console.log("new dash")
+    this.httpClient.put<Dashboard>(`${this.apiUrl}/dashboard`, {}).subscribe(
+      (response) => {
+        this.dashboards.push(
+          response
+        )
+      }
+    )
+  }
+
+  updateDashboard(updatedDashboard: Dashboard): void {
+    this.selectedDashboard = updatedDashboard;
   }
 
   cancel() {
     console.log("cancel")
+    console.log(this.unmodifiedSelectedDashboard);
+    console.log(this.dashboards[this.selectedDashboardIndex]);
+    this.dashboards[this.selectedDashboardIndex] = this.unmodifiedSelectedDashboard;
+    this.selectedDashboard = this.unmodifiedSelectedDashboard;
   }
 
 
   save() {
-    console.log("save")
+    this.unmodifiedSelectedDashboard = this.selectedDashboard;
+    this.httpClient.post(`${this.apiUrl}/dashboard`, this.selectedDashboard).subscribe();
+    this.isEditing = false;
   }
 }

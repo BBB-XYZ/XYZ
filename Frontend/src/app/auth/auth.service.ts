@@ -1,5 +1,5 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {environment} from "../../environments/environment";
@@ -35,7 +35,8 @@ export class AuthService {
         this.isAuthenticated.set(true);
         return true;
       }
-    } catch (error) {
+    } catch (error: any) {
+      alert('Login failed: ' + error.message);
       console.error('Login failed:', error);
       return false;
     }
@@ -60,8 +61,9 @@ export class AuthService {
         this.isAuthenticated.set(true);
         return true;
       }
-    } catch (error) {
-      console.error('Login failed:', error);
+    } catch (error: any) {
+      alert('Register failed: ' + error.message);
+      console.error('Register failed:', error);
       this.isAuthenticated.set(false);
       return false;
     }

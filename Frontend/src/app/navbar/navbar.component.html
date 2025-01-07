@@ -1,8 +1,8 @@
 <div class="navbar">
-  <div class="logo" (click)="navigateTo('/home')">XYZ</div>
+  <div (click)="navigateTo('/home')" class="logo">XYZ</div>
 
   <div class="nav-links">
-    <button class="nav-button" mat-button (click)="navigateTo('/dashboards')">Dashboards</button>
+    <button (click)="navigateTo('/dashboards')" class="nav-button" mat-button>Dashboards</button>
   </div>
 
   <button (click)="toggleAuth()" class="auth-button" mat-button>

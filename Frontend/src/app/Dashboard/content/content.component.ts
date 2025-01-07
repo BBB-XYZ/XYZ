@@ -1,9 +1,8 @@
 import {AfterViewInit, Component, EventEmitter, Input, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {GridStack, GridStackOptions, GridStackWidget} from 'gridstack';
 import {GridstackComponent} from 'gridstack/dist/angular';
-import "gridstack/dist/gridstack.min.css";
 import {FormsModule} from '@angular/forms';
-import {Dashboard, Widget, Owner, DashboardComponent} from '../dashboard.component';
+import {Dashboard, Widget} from '../dashboard.component';
 
 @Component({
   selector: 'app-content',
@@ -17,8 +16,8 @@ import {Dashboard, Widget, Owner, DashboardComponent} from '../dashboard.compone
 })
 
 export class ContentComponent implements AfterViewInit {
-  @Input() dashboardData!: Dashboard;
-  @Input() edit!: boolean;
+  @Input() dashboardData: Dashboard = {} as Dashboard;
+  @Input() edit: boolean = false;
   @Output() dashboardEdit = new EventEmitter<Dashboard>();
 
   @ViewChild(GridStack) grid?: GridStack;
@@ -43,6 +42,10 @@ export class ContentComponent implements AfterViewInit {
     if (changes['dashboardData']) {
       this.updateGridFromDashboardData();
     }
+  }
+
+  onDashboardEdit(): void {
+    this.dashboardEdit.emit(this.dashboardData);
   }
 
   private initializeGrid(): void {
@@ -106,9 +109,5 @@ export class ContentComponent implements AfterViewInit {
         this.grid.load(this.dashboard);
       }
     }
-  }
-
-  onDashboardEdit(): void {
-    this.dashboardEdit.emit(this.dashboardData);
   }
 }

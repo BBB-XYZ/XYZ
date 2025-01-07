@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
+import {Component} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {MatButtonModule} from '@angular/material/button';
+import {CommonModule} from '@angular/common';
 import {environment} from '../../environments/environment';
 
 @Component({
@@ -16,10 +16,11 @@ export class HomeComponent {
   statusCode = 0;
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   triggerRequest() {
-    this.http.get(`${this.apiUrl}/test`, { observe: 'response' }).subscribe({
+    this.http.get(`${this.apiUrl}/test`, {observe: 'response'}).subscribe({
       next: (response) => {
         this.responseValue = JSON.stringify(response.body);
         this.statusCode = response.status;

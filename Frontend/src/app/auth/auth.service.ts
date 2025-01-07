@@ -1,5 +1,5 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
 import {environment} from "../../environments/environment";
@@ -85,16 +85,6 @@ export class AuthService {
     return this.token;
   }
 
-  private checkSession(): void {
-    const storedToken = localStorage.getItem('auth_token');
-    if (storedToken) {
-      this.token = storedToken;
-      this.isAuthenticated.set(true);
-    } else {
-      this.isAuthenticated.set(false);
-    }
-  }
-
   getToken(): string | null {
     return this.token;
   }
@@ -105,5 +95,15 @@ export class AuthService {
 
   clearToken(): void {
     this.token = null;
+  }
+
+  private checkSession(): void {
+    const storedToken = localStorage.getItem('auth_token');
+    if (storedToken) {
+      this.token = storedToken;
+      this.isAuthenticated.set(true);
+    } else {
+      this.isAuthenticated.set(false);
+    }
   }
 }

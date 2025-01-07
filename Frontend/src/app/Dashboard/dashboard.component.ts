@@ -1,11 +1,10 @@
 import {Component, inject} from '@angular/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {ContentComponent} from './content/content.component';
-import {HttpClient, provideHttpClient} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
-import {resolve} from '@angular/compiler-cli';
 
 export type Widget = {
   uuid: string;
@@ -36,7 +35,10 @@ export type Owner = any;
 
 export class DashboardComponent {
   protected dashboards: Dashboard[] = [];
-
+  protected selectedDashboardIndex = 0;
+  protected unmodifiedSelectedDashboard = this.dashboards[0];
+  protected selectedDashboard = this.dashboards[0];
+  protected isEditing = false;
   private httpClient = inject(HttpClient);
   private apiUrl = environment.apiUrl;
 
@@ -49,16 +51,11 @@ export class DashboardComponent {
           );
         }
 
-        this.unmodifiedSelectedDashboard = { ...this.dashboards[0] };
+        this.unmodifiedSelectedDashboard = {...this.dashboards[0]};
         this.selectedDashboard = this.dashboards[0];
       },
     });
   }
-
-  protected selectedDashboardIndex = 0;
-  protected unmodifiedSelectedDashboard = this.dashboards[0];
-  protected selectedDashboard = this.dashboards[0];
-  protected isEditing = false;
 
   toggleEditing() {
     this.isEditing = !this.isEditing;

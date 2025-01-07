@@ -1,6 +1,6 @@
-package com.xyz.backend.authentication.dashboard.dtos;
+package com.xyz.backend.dashboard.dtos;
 
-import com.xyz.backend.authentication.dashboard.widget.dtos.WidgetDTO;
+import com.xyz.backend.dashboard.widget.dtos.WidgetDTO;
 import com.xyz.backend.authentication.user.dtos.DashUserDetailsDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

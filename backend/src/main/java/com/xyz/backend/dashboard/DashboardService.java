@@ -1,17 +1,21 @@
-package com.xyz.backend.authentication.dashboard;
+package com.xyz.backend.dashboard;
 
-import com.xyz.backend.authentication.dashboard.dtos.DashboardDTO;
-import com.xyz.backend.authentication.dashboard.widget.WidgetEntity;
-import com.xyz.backend.authentication.dashboard.widget.WidgetRepository;
-import com.xyz.backend.authentication.dashboard.widget.dtos.WidgetDTO;
 import com.xyz.backend.authentication.user.DashUserDetails;
 import com.xyz.backend.authentication.user.DashUserDetailsRepository;
+import com.xyz.backend.dashboard.dtos.DashboardDTO;
+import com.xyz.backend.dashboard.widget.WidgetEntity;
+import com.xyz.backend.dashboard.widget.WidgetRepository;
+import com.xyz.backend.dashboard.widget.dtos.WidgetDTO;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
+@Service
+@AllArgsConstructor
 public class DashboardService {
   private DashUserDetailsRepository dashUserDetailsRepository;
   private DashboardRepository dashboardRepository;
@@ -20,17 +24,11 @@ public class DashboardService {
   public ResponseEntity<DashboardDTO[]> loadAllDashboards() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (authentication != null) {
+    if (!(authentication.getPrincipal() instanceof DashUserDetails userDetails)) {
       return ResponseEntity.status(401).build();
     }
 
-    Optional<DashUserDetails> userDetails = dashUserDetailsRepository.findByUsername(authentication.getPrincipal().toString());
-
-    if (userDetails.isEmpty()) {
-      return ResponseEntity.status(401).build();
-    }
-
-    DashboardDTO[] dashboardDTOs = dashboardRepository.findAllByOwner(userDetails.get())
+    DashboardDTO[] dashboardDTOs = dashboardRepository.findAllByOwner(userDetails)
         .stream().map(DashboardEntity::toDTO).toArray(DashboardDTO[]::new);
 
     return ResponseEntity.ok(dashboardDTOs);
@@ -39,19 +37,13 @@ public class DashboardService {
   public ResponseEntity<DashboardDTO> loadDashboard(UUID uuid) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (authentication != null) {
-      return ResponseEntity.status(401).build();
-    }
-
-    Optional<DashUserDetails> userDetails = dashUserDetailsRepository.findByUsername(authentication.getPrincipal().toString());
-
-    if (userDetails.isEmpty()) {
+    if (!(authentication.getPrincipal() instanceof DashUserDetails userDetails)) {
       return ResponseEntity.status(401).build();
     }
 
     Optional<DashboardEntity> dashboardEntity = dashboardRepository.findById(uuid);
 
-    if (dashboardEntity.isEmpty() || !dashboardEntity.get().getOwner().equals(userDetails.get())) {
+    if (dashboardEntity.isEmpty() || !dashboardEntity.get().getOwner().equals(userDetails)) {
       return ResponseEntity.status(401).build();
     }
 
@@ -61,18 +53,12 @@ public class DashboardService {
   public ResponseEntity<DashboardDTO> createDashboard() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (authentication != null) {
-      return ResponseEntity.status(401).build();
-    }
-
-    Optional<DashUserDetails> userDetails = dashUserDetailsRepository.findByUsername(authentication.getPrincipal().toString());
-
-    if (userDetails.isEmpty()) {
+    if (!(authentication.getPrincipal() instanceof DashUserDetails userDetails)) {
       return ResponseEntity.status(401).build();
     }
 
     DashboardEntity dashboardEntity = new DashboardEntity();
-    dashboardEntity.setOwner(userDetails.get());
+    dashboardEntity.setOwner(userDetails);
     dashboardEntity.setName("New Dashboard");
 
     return ResponseEntity.ok(dashboardRepository.save(dashboardEntity).toDTO());
@@ -81,21 +67,15 @@ public class DashboardService {
   public ResponseEntity<DashboardDTO> editDashboard(DashboardDTO dashboardDTO) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (authentication != null) {
-      return ResponseEntity.status(401).build();
-    }
-
-    Optional<DashUserDetails> userDetails = dashUserDetailsRepository.findByUsername(authentication.getPrincipal().toString());
-
-    if (userDetails.isEmpty()) {
+    if (!(authentication.getPrincipal() instanceof DashUserDetails userDetails)) {
       return ResponseEntity.status(401).build();
     }
 
     UUID dashboardUuid = UUID.fromString(dashboardDTO.getUuid());
     Optional<DashboardEntity> dashboardEntity = dashboardRepository.findById(dashboardUuid);
 
-    if (dashboardEntity.isEmpty() || !dashboardEntity.get().getOwner().equals(userDetails.get())) {
-      return ResponseEntity.status(401).build();
+    if (dashboardEntity.isEmpty() || !dashboardEntity.get().getOwner().getId().equals(userDetails.getId())) {
+      return ResponseEntity.status(404).build();
     }
 
     DashboardEntity dashboard = dashboardEntity.get();
@@ -125,20 +105,14 @@ public class DashboardService {
   public ResponseEntity<Void> deleteDashboard(DashboardDTO dashboardDTO) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (authentication != null) {
-      return ResponseEntity.status(401).build();
-    }
-
-    Optional<DashUserDetails> userDetails = dashUserDetailsRepository.findByUsername(authentication.getPrincipal().toString());
-
-    if (userDetails.isEmpty()) {
+    if (!(authentication.getPrincipal() instanceof DashUserDetails userDetails)) {
       return ResponseEntity.status(401).build();
     }
 
     UUID dashboardUuid = UUID.fromString(dashboardDTO.getUuid());
     Optional<DashboardEntity> dashboardEntity = dashboardRepository.findById(dashboardUuid);
 
-    if (dashboardEntity.isEmpty() || !dashboardEntity.get().getOwner().equals(userDetails.get())) {
+    if (dashboardEntity.isEmpty() || !dashboardEntity.get().getOwner().equals(userDetails)) {
       return ResponseEntity.status(401).build();
     }
 

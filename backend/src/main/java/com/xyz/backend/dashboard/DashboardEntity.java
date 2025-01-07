@@ -1,10 +1,9 @@
-package com.xyz.backend.authentication.dashboard;
+package com.xyz.backend.dashboard;
 
-import com.xyz.backend.authentication.dashboard.dtos.DashboardDTO;
-import com.xyz.backend.authentication.dashboard.widget.WidgetEntity;
-import com.xyz.backend.authentication.dashboard.widget.dtos.WidgetDTO;
 import com.xyz.backend.authentication.user.DashUserDetails;
-import jakarta.persistence.CascadeType;
+import com.xyz.backend.dashboard.dtos.DashboardDTO;
+import com.xyz.backend.dashboard.widget.WidgetEntity;
+import com.xyz.backend.dashboard.widget.dtos.WidgetDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,8 +35,8 @@ public class DashboardEntity {
   @ManyToOne
   private DashUserDetails owner;
 
-  @OneToMany(cascade = CascadeType.REMOVE)
-  private List<WidgetEntity> widgets;
+  @OneToMany
+  private List<WidgetEntity> widgets = List.of();
 
   public DashboardDTO toDTO() {
     return new DashboardDTO(uuid.toString(), name, owner.toDTO(), widgets.stream()

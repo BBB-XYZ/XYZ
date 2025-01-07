@@ -1,7 +1,8 @@
-package com.xyz.backend.authentication.dashboard;
+package com.xyz.backend.dashboard;
 
-import com.xyz.backend.authentication.dashboard.dtos.DashboardDTO;
+import com.xyz.backend.dashboard.dtos.DashboardDTO;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/dashboard")
+@AllArgsConstructor
 public class DashboardController {
 
   private DashboardService dashboardService;

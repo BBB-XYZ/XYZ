@@ -1,4 +1,4 @@
-package com.xyz.backend.authentication.dashboard;
+package com.xyz.backend.dashboard;
 
 import com.xyz.backend.authentication.user.DashUserDetails;
 import java.util.List;

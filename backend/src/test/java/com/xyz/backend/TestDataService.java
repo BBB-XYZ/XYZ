@@ -1,11 +1,11 @@
 package com.xyz.backend;
 
 import com.xyz.backend.authentication.AuthenticationService;
-import com.xyz.backend.authentication.dashboard.DashboardEntity;
-import com.xyz.backend.authentication.dashboard.DashboardRepository;
 import com.xyz.backend.authentication.dtos.LoginRequestDTO;
 import com.xyz.backend.authentication.user.DashUserDetails;
 import com.xyz.backend.authentication.user.DashUserDetailsRepository;
+import com.xyz.backend.dashboard.DashboardEntity;
+import com.xyz.backend.dashboard.DashboardRepository;
 import java.util.Optional;
 import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

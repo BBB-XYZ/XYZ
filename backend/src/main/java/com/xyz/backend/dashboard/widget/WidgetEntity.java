@@ -1,7 +1,7 @@
-package com.xyz.backend.authentication.dashboard.widget;
+package com.xyz.backend.dashboard.widget;
 
-import com.xyz.backend.authentication.dashboard.DashboardEntity;
-import com.xyz.backend.authentication.dashboard.widget.dtos.WidgetDTO;
+import com.xyz.backend.dashboard.DashboardEntity;
+import com.xyz.backend.dashboard.widget.dtos.WidgetDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,8 +22,8 @@ import lombok.Setter;
 @Table(name = "widgets")
 public class WidgetEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID uuid;
 
   @Column(nullable = false)
   private String widgetStoreUrl;
@@ -46,6 +47,6 @@ public class WidgetEntity {
   private DashboardEntity dashboard;
 
   public WidgetDTO toDTO() {
-    return new WidgetDTO(id, widgetStoreUrl, widgetId, x, y, width, height);
+    return new WidgetDTO(uuid.toString(), widgetStoreUrl, widgetId, x, y, width, height);
   }
 }

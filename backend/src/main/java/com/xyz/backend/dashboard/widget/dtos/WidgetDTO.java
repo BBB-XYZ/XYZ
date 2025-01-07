@@ -1,4 +1,4 @@
-package com.xyz.backend.authentication.dashboard.widget.dtos;
+package com.xyz.backend.dashboard.widget.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class WidgetDTO {
-  private long id;
+  private String uuid;
   private String widgetStoreUrl;
   private String widgetId;
 

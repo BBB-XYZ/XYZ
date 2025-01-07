@@ -8,6 +8,7 @@ import com.xyz.backend.dashboard.DashboardEntity;
 import com.xyz.backend.dashboard.DashboardRepository;
 import java.util.Optional;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,15 @@ public class TestDataService {
   private AuthenticationService authenticationService;
   private DashUserDetailsRepository userDetailsRepository;
   private DashboardRepository dashboardRepository;
+
+  @Autowired
+  public TestDataService(AuthenticationService authenticationService,
+      DashUserDetailsRepository userDetailsRepository,
+      DashboardRepository dashboardRepository) {
+    this.authenticationService = authenticationService;
+    this.userDetailsRepository = userDetailsRepository;
+    this.dashboardRepository = dashboardRepository;
+  }
 
   public DashUserDetails authenticateSession(String username, String password) {
     LoginRequestDTO loginRequestDTO = new LoginRequestDTO(username, password);

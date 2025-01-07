@@ -6,6 +6,7 @@ import com.xyz.backend.dashboard.widget.WidgetEntity;
 import com.xyz.backend.dashboard.widget.dtos.WidgetDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,10 +33,10 @@ public class DashboardEntity {
   @Column(nullable = false)
   private String name;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   private DashUserDetails owner;
 
-  @OneToMany
+  @OneToMany(fetch = FetchType.EAGER)
   private List<WidgetEntity> widgets = List.of();
 
   public DashboardDTO toDTO() {

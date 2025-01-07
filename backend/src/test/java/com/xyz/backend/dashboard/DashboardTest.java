@@ -11,10 +11,12 @@ import com.xyz.backend.dashboard.widget.WidgetEntity;
 import com.xyz.backend.dashboard.widget.dtos.WidgetDTO;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
@@ -37,13 +39,19 @@ public class DashboardTest extends BackendApplicationTest {
   private DashUserDetails currentUser = null;
   private DashboardEntity existingDashboard = null;
 
-  public DashboardTest(MockMvc mockMvc, String endpoint,
-      ObjectMapper objectMapper) {
-    super(mockMvc, endpoint, objectMapper);
+  @Autowired
+  public DashboardTest(MockMvc mockMvc, ObjectMapper objectMapper,
+      DashboardService dashboardService, TestDataService testDataService,
+      DashboardRepository dashboardRepository) {
+    super(mockMvc, "/dashboard", objectMapper);
+
+    this.dashboardService = dashboardService;
+    this.testDataService = testDataService;
+    this.dashboardRepository = dashboardRepository;
   }
 
-  @BeforeAll
-  void beforeAll() {
+  @BeforeEach
+  void beforeEach() {
     currentUser = testDataService.authenticateSession(USERNAME, PASSWORD);
 
     DashboardDTO dashboardDTO = dashboardService.createDashboard().getBody();

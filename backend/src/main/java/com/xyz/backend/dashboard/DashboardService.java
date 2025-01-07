@@ -112,7 +112,7 @@ public class DashboardService {
     UUID dashboardUuid = UUID.fromString(dashboardDTO.getUuid());
     Optional<DashboardEntity> dashboardEntity = dashboardRepository.findById(dashboardUuid);
 
-    if (dashboardEntity.isEmpty() || !dashboardEntity.get().getOwner().equals(userDetails)) {
+    if (dashboardEntity.isEmpty() || !dashboardEntity.get().getOwner().getId().equals(userDetails.getId())) {
       return ResponseEntity.status(401).build();
     }
 

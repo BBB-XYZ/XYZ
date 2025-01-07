@@ -6,6 +6,7 @@ import com.xyz.backend.authentication.session.UserSessionService;
 import com.xyz.backend.authentication.session.dtos.SessionDTO;
 import com.xyz.backend.authentication.user.DashUserDetails;
 import com.xyz.backend.authentication.user.DashUserDetailsRepository;
+import com.xyz.backend.dashboard.DashboardService;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,11 +21,11 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
   private DashAuthenticationManager authenticationManager;
   private DashUserDetailsRepository userDetailsRepository;
+  private DashboardService dashboardService;
 
   private UserSessionService userSessionService;
 
   private PasswordEncoder passwordEncoder;
-  private HttpSessionSecurityContextRepository securityContextRepository;
 
   public ResponseEntity<SessionDTO> login(LoginRequestDTO loginRequest) {
     Authentication authenticationRequest = UsernamePasswordAuthenticationToken
@@ -44,9 +44,9 @@ public class AuthenticationService {
 
       userDetails.get().setSession(userSessionEntity);
       userDetailsRepository.save(userDetails.get());
-      SessionDTO sessionDto = new SessionDTO(userSessionEntity.getToken());
 
-      return ResponseEntity.ok().header("Set-Cookie", "JSESSIONID=" + userSessionEntity.getToken()).body(sessionDto);
+      SessionDTO sessionDto = new SessionDTO(userSessionEntity.getToken());
+      return ResponseEntity.ok().body(sessionDto);
     }
 
     return ResponseEntity.status(401).build();
@@ -61,10 +61,15 @@ public class AuthenticationService {
       return ResponseEntity.status(409).build();
     }
 
-    UserSessionEntity userSessionEntity = userSessionService.createSession();
-    userDetails.setSession(userSessionEntity);
     userDetailsRepository.save(userDetails);
-    return ResponseEntity.ok().body(new SessionDTO(userSessionEntity.getToken()));
+
+    ResponseEntity<SessionDTO> loginResponse = login(loginRequest);
+
+    if (!loginResponse.getStatusCode().isError()) {
+      dashboardService.createDashboard();
+    }
+
+    return loginResponse;
   }
 
   public ResponseEntity<Void> logout() {
@@ -80,6 +85,7 @@ public class AuthenticationService {
     userDetails.get().setSession(null);
     userDetailsRepository.save(userDetails.get());
     userSessionService.invalidateSession(session.getToken());
+
     return ResponseEntity.ok().build();
   }
 }

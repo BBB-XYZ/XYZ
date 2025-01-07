@@ -1,5 +1,7 @@
 package com.xyz.backend.authentication;
 
+import com.xyz.backend.authentication.session.UserSessionEntity;
+import com.xyz.backend.authentication.session.UserSessionService;
 import com.xyz.backend.authentication.user.DashUserDetails;
 import com.xyz.backend.authentication.user.DashUserDetailsRepository;
 import jakarta.servlet.FilterChain;
@@ -18,13 +20,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @AllArgsConstructor
 public class SessionAuthenticationFilter extends OncePerRequestFilter {
   private DashUserDetailsRepository userDetailsRepository;
+  private UserSessionService userSessionService;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
     String token = request.getHeader("Authorization");
-
-    System.out.println("Token: " + token);
 
     if (token == null) {
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -33,12 +34,20 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
 
     Optional<DashUserDetails> userDetails = userDetailsRepository.findBySession_Token(token);
     if (userDetails.isEmpty()) {
-      System.out.println("User not found");
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       return;
     }
 
-    System.out.println("User: " + userDetails.get().getUsername());
+    if (userDetails.get().getSession().getExpiresAt() < System.currentTimeMillis()) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      UserSessionEntity userSessionEntity = userDetails.get().getSession();
+
+      userDetails.get().setSession(null);
+      userDetailsRepository.save(userDetails.get());
+
+      userSessionService.invalidateSession(userSessionEntity.getToken());
+      return;
+    }
 
     SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails.get(), token,
         userDetails.get().getAuthorities()));

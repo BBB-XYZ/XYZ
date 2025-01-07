@@ -1,6 +1,7 @@
 package com.xyz.backend.authentication.user;
 
 import com.xyz.backend.authentication.session.UserSessionEntity;
+import com.xyz.backend.authentication.user.dtos.DashUserDetailsDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,5 +51,10 @@ public class DashUserDetails implements UserDetails {
   @Override
   public String getPassword() {
     return password;
+  }
+
+  public DashUserDetailsDTO toDTO() {
+    return new DashUserDetailsDTO(id, username,
+        new String[0] /* will be implemented if there is enough time */);
   }
 }

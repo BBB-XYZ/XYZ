@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PasswordConfirmDialogComponent } from './password-confirm-dialog.component';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {PasswordConfirmDialogComponent} from './password-confirm-dialog.component';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('PasswordConfirmDialogComponent', () => {
   let component: PasswordConfirmDialogComponent;

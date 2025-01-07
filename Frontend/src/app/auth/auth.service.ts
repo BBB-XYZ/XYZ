@@ -35,7 +35,8 @@ export class AuthService {
         this.isAuthenticated.set(true);
         return true;
       }
-    } catch (error) {
+    } catch (error: any) {
+      alert('Login failed: ' + error.message);
       console.error('Login failed:', error);
       return false;
     }
@@ -60,8 +61,9 @@ export class AuthService {
         this.isAuthenticated.set(true);
         return true;
       }
-    } catch (error) {
-      console.error('Login failed:', error);
+    } catch (error: any) {
+      alert('Register failed: ' + error.message);
+      console.error('Register failed:', error);
       this.isAuthenticated.set(false);
       return false;
     }
@@ -83,16 +85,6 @@ export class AuthService {
     return this.token;
   }
 
-  private checkSession(): void {
-    const storedToken = localStorage.getItem('auth_token');
-    if (storedToken) {
-      this.token = storedToken;
-      this.isAuthenticated.set(true);
-    } else {
-      this.isAuthenticated.set(false);
-    }
-  }
-
   getToken(): string | null {
     return this.token;
   }
@@ -103,5 +95,15 @@ export class AuthService {
 
   clearToken(): void {
     this.token = null;
+  }
+
+  private checkSession(): void {
+    const storedToken = localStorage.getItem('auth_token');
+    if (storedToken) {
+      this.token = storedToken;
+      this.isAuthenticated.set(true);
+    } else {
+      this.isAuthenticated.set(false);
+    }
   }
 }

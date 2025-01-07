@@ -24,6 +24,7 @@
   </div>
 
   <div class="content">
-    <app-content [edit]="isEditing" [dashboardData]="dashboards[selectedDashboardIndex]"></app-content>
+    <app-content (dashboardEdit)="updateDashboard($event)" [dashboardData]="dashboards[selectedDashboardIndex]"
+                 [edit]="isEditing"></app-content>
   </div>
 </div>

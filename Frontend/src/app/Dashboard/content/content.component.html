@@ -1,6 +1,13 @@
 <div>
-  <p>{{this.edit}}</p>
-  <p>{{dashboardData.name}}</p>
-  <p>{{dashboardData.id}}</p>
-  <p>{{dashboardData.widgets}}</p>
+  @if (edit) {
+    <input
+      [(ngModel)]="dashboardData.name"
+      (ngModelChange)="onDashboardEdit()"
+      class="editable-title"
+      type="text"
+    />
+  } @else {
+    <h2>{{ dashboardData.name }}</h2>
+  }
+  <gridstack></gridstack>
 </div>

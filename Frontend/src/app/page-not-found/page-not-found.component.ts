@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {MatCard, MatCardContent, MatCardHeader} from "@angular/material/card";
 
 @Component({

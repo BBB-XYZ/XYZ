@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
-import { AuthInterceptor } from './auth.interceptor';
-import { AuthService } from './auth.service';
+import {TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HTTP_INTERCEPTORS, HttpClient} from '@angular/common/http';
+import {AuthInterceptor} from './auth.interceptor';
+import {AuthService} from './auth.service';
 
 describe('AuthInterceptor', () => {
   let httpMock: HttpTestingController;
@@ -58,7 +58,7 @@ describe('AuthInterceptor', () => {
     });
 
     const req = httpMock.expectOne('/test');
-    req.flush('Server Error', { status: 500, statusText: 'Server Error' });
+    req.flush('Server Error', {status: 500, statusText: 'Server Error'});
   });
 
 
@@ -66,11 +66,11 @@ describe('AuthInterceptor', () => {
     authService.setToken('mock-token');
 
     httpClient.get('/test').subscribe(response => {
-      expect(response).toEqual({ data: 'test data' });
+      expect(response).toEqual({data: 'test data'});
     });
 
     const req = httpMock.expectOne('/test');
-    req.flush({ data: 'test data' });
+    req.flush({data: 'test data'});
   });
 
   afterEach(() => {

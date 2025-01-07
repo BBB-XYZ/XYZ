@@ -5,11 +5,34 @@
   padding: 16px 24px;
   background-color: #333;
   color: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   .logo {
     font-size: 24px;
     font-weight: bold;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 16px;
+  }
+
+  .nav-button {
+    font-size: 16px;
+    color: white;
+    background-color: #444;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #555;
+    }
+
+    &:focus {
+      outline: none;
+    }
   }
 
   .auth-button {

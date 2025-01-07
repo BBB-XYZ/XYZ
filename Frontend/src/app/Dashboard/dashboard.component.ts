@@ -79,7 +79,6 @@ export class DashboardComponent {
   }
 
   cancel() {
-    console.log("cancel")
     console.log(this.unmodifiedSelectedDashboard);
     console.log(this.dashboards[this.selectedDashboardIndex]);
     this.dashboards[this.selectedDashboardIndex] = this.unmodifiedSelectedDashboard;

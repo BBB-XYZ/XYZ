@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {MatCard, MatCardContent, MatCardHeader} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader} from '@angular/material/card';
 
 @Component({
   selector: 'app-page-not-found',
@@ -13,5 +13,4 @@ import {MatCard, MatCardContent, MatCardHeader} from "@angular/material/card";
   styleUrl: './page-not-found.component.scss'
 })
 export class PageNotFoundComponent {
-
 }

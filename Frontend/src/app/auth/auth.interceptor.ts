@@ -5,10 +5,9 @@ import {AuthService} from './auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-
   private authService = inject(AuthService);
 
-  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+  public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();
 
     if (token) {
@@ -19,7 +18,6 @@ export class AuthInterceptor implements HttpInterceptor {
       });
       return next.handle(cloned);
     }
-
-    return next.handle(req); // Hopes and Prayers, maybe we messed up the backend auth and it will work ;)
+    return next.handle(req);
   }
 }

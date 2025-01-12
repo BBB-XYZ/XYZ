@@ -1,18 +1,21 @@
 import {TestBed} from '@angular/core/testing';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {AuthService} from './auth.service';
 import {environment} from '../../environments/environment';
+import {provideHttpClient} from '@angular/common/http';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
     });
     service = TestBed.inject(AuthService);
-    httpMock = TestBed.inject(HttpTestingController);
   });
 
   it('should be created', () => {
@@ -30,7 +33,7 @@ describe('AuthService', () => {
       expect(service.getToken()).toBe(mockToken);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/login`);
+    const req = TestBed.inject(HttpTestingController).expectOne(`${environment.apiUrl}/login`);
     expect(req.request.method).toBe('POST');
     req.flush({token: mockToken});
   });
@@ -44,7 +47,7 @@ describe('AuthService', () => {
       expect(service.isAuthenticated()).toBe(false);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/login`);
+    const req = TestBed.inject(HttpTestingController).expectOne(`${environment.apiUrl}/login`);
     expect(req.request.method).toBe('POST');
     req.error(new ProgressEvent('Network error'));
   });
@@ -60,12 +63,12 @@ describe('AuthService', () => {
       expect(service.getToken()).toBe(mockToken);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/register`);
+    const req = TestBed.inject(HttpTestingController).expectOne(`${environment.apiUrl}/register`);
     expect(req.request.method).toBe('POST');
     req.flush({token: mockToken});
   });
 
-  it('should log out the user', () => {
+  it('should log out the user and remove token', () => {
     service.setToken('mock-token');
     service.isAuthenticated.set(true);
 
@@ -81,7 +84,11 @@ describe('AuthService', () => {
 
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
     });
 
     const newService = TestBed.inject(AuthService);

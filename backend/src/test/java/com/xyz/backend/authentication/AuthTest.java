@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xyz.backend.BackendApplicationTest;
+import com.xyz.backend.TestDataService;
 import com.xyz.backend.authentication.dtos.LoginRequestDTO;
 import com.xyz.backend.authentication.session.UserSessionEntity;
 import com.xyz.backend.authentication.session.UserSessionRepository;
@@ -39,6 +40,8 @@ public class AuthTest extends BackendApplicationTest {
   private static final String PASSWORD = "valid_password";
 
   private String validSession;
+  @Autowired
+  private TestDataService testDataService;
 
   @Autowired
   public AuthTest(MockMvc restClient, ObjectMapper objectMapper, AuthenticationService authenticationService,
@@ -54,9 +57,7 @@ public class AuthTest extends BackendApplicationTest {
 
   @BeforeAll
   void before() {
-    DashUserDetails dashUserDetails = new DashUserDetails();
-    dashUserDetails.setUsername(USERNAME);
-    dashUserDetails.setPassword(passwordEncoder.encode(PASSWORD));
+    DashUserDetails dashUserDetails = testDataService.getOrCreateUser(USERNAME, PASSWORD);
 
     UserSessionEntity userSessionEntity = new UserSessionEntity();
     userSessionEntity.setExpiresAt(System.currentTimeMillis() + (1000 * 3600));
@@ -64,7 +65,6 @@ public class AuthTest extends BackendApplicationTest {
 
     dashUserDetails.setSession(userSessionEntity);
     userDetailsRepository.save(dashUserDetails);
-
   }
 
   @Test

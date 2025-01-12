@@ -19,11 +19,9 @@ export type Widget = {
 export type Dashboard = {
   id: string;
   name: string;
-  owner: Owner;
+  owner: any;
   widgets: Widget[];
 };
-
-export type Owner = any;
 
 @Component({
   selector: 'app-dashboard',
@@ -40,10 +38,10 @@ export class DashboardComponent {
   protected selectedDashboard = this.dashboards[0];
   protected isEditing = false;
   private httpClient = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private readonly API_URL = environment.apiUrl;
 
-  constructor() {
-    this.httpClient.get<Dashboard[]>(`${this.apiUrl}/dashboard/all`).subscribe({
+  public constructor() {
+    this.httpClient.get<Dashboard[]>(`${this.API_URL}/dashboard/all`).subscribe({
       next: (response) => {
         for (const dashboard of response) {
           this.dashboards.push(
@@ -57,15 +55,15 @@ export class DashboardComponent {
     });
   }
 
-  toggleEditing() {
+  protected toggleEditing() {
     this.isEditing = !this.isEditing;
     if (!this.isEditing) {
       this.cancel();
     }
   }
 
-  createNewDashboard() {
-    this.httpClient.put<Dashboard>(`${this.apiUrl}/dashboard`, {}).subscribe(
+  protected createNewDashboard() {
+    this.httpClient.put<Dashboard>(`${this.API_URL}/dashboard`, {}).subscribe(
       (response) => {
         this.dashboards.push(
           response
@@ -74,11 +72,11 @@ export class DashboardComponent {
     )
   }
 
-  updateDashboard(updatedDashboard: Dashboard): void {
+  protected updateDashboard(updatedDashboard: Dashboard): void {
     this.selectedDashboard = updatedDashboard;
   }
 
-  cancel() {
+  protected cancel() {
     console.log(this.unmodifiedSelectedDashboard);
     console.log(this.dashboards[this.selectedDashboardIndex]);
     this.dashboards[this.selectedDashboardIndex] = this.unmodifiedSelectedDashboard;
@@ -86,9 +84,9 @@ export class DashboardComponent {
   }
 
 
-  save() {
+  protected save() {
     this.unmodifiedSelectedDashboard = this.selectedDashboard;
-    this.httpClient.post(`${this.apiUrl}/dashboard`, this.selectedDashboard).subscribe();
+    this.httpClient.post(`${this.API_URL}/dashboard`, this.selectedDashboard).subscribe();
     this.isEditing = false;
   }
 }

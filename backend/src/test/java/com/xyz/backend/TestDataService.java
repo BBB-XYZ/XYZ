@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +23,17 @@ public class TestDataService {
   private AuthenticationService authenticationService;
   private DashUserDetailsRepository userDetailsRepository;
   private DashboardRepository dashboardRepository;
+  private PasswordEncoder passwordEncoder;
 
   @Autowired
   public TestDataService(AuthenticationService authenticationService,
       DashUserDetailsRepository userDetailsRepository,
-      DashboardRepository dashboardRepository) {
+      DashboardRepository dashboardRepository,
+      PasswordEncoder passwordEncoder) {
     this.authenticationService = authenticationService;
     this.userDetailsRepository = userDetailsRepository;
     this.dashboardRepository = dashboardRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public DashUserDetails authenticateSession(String username, String password) {
@@ -81,5 +85,19 @@ public class TestDataService {
     //dashboardEntity.setOwner(dashUserDetails);
 
     return dashboardRepository.save(dashboardEntity);
+  }
+
+  public DashUserDetails getOrCreateUser(String username, String password) {
+    Optional<DashUserDetails> userDetailsOptional = userDetailsRepository.findByUsername(username);
+
+    if (userDetailsOptional.isPresent()) {
+      return userDetailsOptional.get();
+    }
+
+    DashUserDetails userDetails = new DashUserDetails();
+    userDetails.setUsername(username);
+    userDetails.setPassword(passwordEncoder.encode(password));
+
+    return userDetailsRepository.save(userDetails);
   }
 }

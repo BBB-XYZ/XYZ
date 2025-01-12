@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {GridStack, GridStackOptions, GridStackWidget} from 'gridstack';
 import {GridstackComponent} from 'gridstack/dist/angular';
 import {FormsModule} from '@angular/forms';
@@ -27,24 +27,13 @@ export class ContentComponent implements AfterViewInit {
     minRow: 1,
     acceptWidgets: true,
   };
-
   private dashboard: GridStackWidget[] = [];
 
-  ngAfterViewInit(): void {
+  public ngAfterViewInit(): void {
     this.initializeGrid();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['edit']) {
-      this.updateGridEditStatus(this.edit);
-    }
-
-    if (changes['dashboardData']) {
-      this.updateGridFromDashboardData();
-    }
-  }
-
-  onDashboardEdit(): void {
+  protected onDashboardEdit(): void {
     this.dashboardEdit.emit(this.dashboardData);
   }
 
@@ -56,7 +45,11 @@ export class ContentComponent implements AfterViewInit {
 
     if (this.grid) {
       this.grid.load(this.dashboard);
-      this.updateGridEditStatus(this.edit);
+      if (this.edit) {
+        this.enableGridEditing();
+      } else {
+        this.disableGridEditing();
+      }
 
       this.grid.on('change', (event, items) => {
         this.updateDashboardData(items as GridStackWidget[]);
@@ -64,14 +57,14 @@ export class ContentComponent implements AfterViewInit {
     }
   }
 
-  private updateGridEditStatus(edit: boolean): void {
-    if (this.grid) {
-      if (edit) {
-        this.grid.enable();
-      } else {
-        this.grid.disable();
-      }
-    }
+  private enableGridEditing(): void {
+    this.edit = true;
+    this.grid?.enable();
+  }
+
+  private disableGridEditing(): void {
+    this.edit = false;
+    this.grid?.disable();
   }
 
   private mapWidgetsToGridStackWidgets(widgets: Widget[]): GridStackWidget[] {
@@ -98,16 +91,6 @@ export class ContentComponent implements AfterViewInit {
       }));
 
       this.dashboardEdit.emit(this.dashboardData);
-    }
-  }
-
-  private updateGridFromDashboardData(): void {
-    if (this.dashboardData && this.dashboardData.widgets) {
-      this.dashboard = this.mapWidgetsToGridStackWidgets(this.dashboardData.widgets);
-      if (this.grid) {
-        this.grid.removeAll();
-        this.grid.load(this.dashboard);
-      }
     }
   }
 }

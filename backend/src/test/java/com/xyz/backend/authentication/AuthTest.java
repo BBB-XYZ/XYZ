@@ -11,9 +11,7 @@ import com.xyz.backend.authentication.session.UserSessionRepository;
 import com.xyz.backend.authentication.session.dtos.SessionDTO;
 import com.xyz.backend.authentication.user.DashUserDetails;
 import com.xyz.backend.authentication.user.DashUserDetailsRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -56,6 +54,8 @@ public class AuthTest extends BackendApplicationTest {
 
   @BeforeAll
   void before() {
+    userDetailsRepository.deleteAll();
+
     DashUserDetails dashUserDetails = new DashUserDetails();
     dashUserDetails.setUsername(USERNAME);
     dashUserDetails.setPassword(passwordEncoder.encode(PASSWORD));
@@ -66,7 +66,6 @@ public class AuthTest extends BackendApplicationTest {
 
     dashUserDetails.setSession(userSessionEntity);
     userDetailsRepository.save(dashUserDetails);
-
   }
 
   @Test

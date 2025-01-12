@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;

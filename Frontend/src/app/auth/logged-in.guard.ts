@@ -7,7 +7,7 @@ export const loggedInGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (!authService.isAuthenticated()) {
-    console.log("nuh uh")
+    alert('You need to be logged in to view this page.')
     router.navigate(['/login']).then();
     return false;
   }

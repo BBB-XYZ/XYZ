@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {MatButtonModule} from '@angular/material/button';
 import {CommonModule} from '@angular/common';
@@ -12,14 +12,12 @@ import {environment} from '../../environments/environment';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  responseValue = '';
-  statusCode = 0;
+  protected responseValue = '';
+  protected statusCode = 0;
   private readonly apiUrl = environment.apiUrl;
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {
-  }
-
-  triggerRequest() {
+  protected triggerRequest() {
     this.http.get(`${this.apiUrl}/test`, {observe: 'response'}).subscribe({
       next: (response) => {
         this.responseValue = JSON.stringify(response.body);

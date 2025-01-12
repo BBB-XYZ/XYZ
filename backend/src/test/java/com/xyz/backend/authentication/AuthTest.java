@@ -54,6 +54,8 @@ public class AuthTest extends BackendApplicationTest {
 
   @BeforeAll
   void before() {
+    userDetailsRepository.deleteAll();
+
     DashUserDetails dashUserDetails = new DashUserDetails();
     dashUserDetails.setUsername(USERNAME);
     dashUserDetails.setPassword(passwordEncoder.encode(PASSWORD));
@@ -64,7 +66,6 @@ public class AuthTest extends BackendApplicationTest {
 
     dashUserDetails.setSession(userSessionEntity);
     userDetailsRepository.save(dashUserDetails);
-
   }
 
   @Test
